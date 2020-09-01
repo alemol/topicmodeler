@@ -70,7 +70,7 @@ pip install -r `requirements.txt`
 Teniendo todo listo se pude probar la funcionalidad y mostrar todo el pipeline con datos de prueba.
 
 ```bash
-python services4anaest.py
+python topic_extraction.py
 
 ```
 
