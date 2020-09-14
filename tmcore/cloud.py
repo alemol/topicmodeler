@@ -47,7 +47,7 @@ def topic2cloud(i, dict_topic, cloud_dir):
     if not exists(cloud_dir):
         makedirs(cloud_dir)
     # load logo
-    #logo_mask = np.array(Image.open("./img/lupa.png"))
+    #logo_mask = np.array(Image.open("./masksinaloa.png"))
     # Generate a word cloud image
     wordcloud = WordCloud(background_color="white",
                           width=1920,
@@ -55,8 +55,10 @@ def topic2cloud(i, dict_topic, cloud_dir):
                           #mask=logo_mask,
                           ).generate_from_frequencies(dict_topic)
 
+    plt.figure( figsize=(19.4, 12))
     plt.imshow(wordcloud, interpolation='bilinear', aspect='auto')
     plt.axis("off")
+    plt.tight_layout(pad=0)
     cdir = join(cloud_dir, 'wordcloud_{}.png'.format(i))
     plt.savefig(cdir)
     plt.close()

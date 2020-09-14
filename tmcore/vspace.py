@@ -182,7 +182,11 @@ def store_vspace(tf_vectorizer, dtmatrix, gensim_corpus, gensim_dict, out_dir):
 
     pname = join(out_dir, 'vocabulario.txt')
     with open(pname, 'w') as out:
-       out.write('{}'.format(tf_vectorizer.get_feature_names()))
+        toks = tf_vectorizer.get_feature_names()
+        freqs = dtmatrix.toarray().sum(axis=0)
+        counts={t: freqs[i] for i, t in enumerate(toks)}
+        for k,v in sorted(counts.items(), key=lambda x:x[1], reverse=True):
+            out.write('{}\t{}\n'.format(v, k))
 
     # store the gensim dictionary to file
     pname = join(out_dir, 'diccionario.dict')
@@ -194,6 +198,14 @@ def store_vspace(tf_vectorizer, dtmatrix, gensim_corpus, gensim_dict, out_dir):
     pname = join(out_dir, 'corpus.mm')
     corpora.MmCorpus.serialize(pname, gensim_corpus)
 
+    #pname = join(out_dir, 'frecuencias.txt')
+    #with open(pname, 'w') as out:
+        #idtok_dict = gensim_dict.id2token
+        #print('idtok_dict', type(idtok_dict), len(idtok_dict))
+        #print('gensim_dict', type(gensim_dict), len(gensim_dict.cfs))
+        #for tokid, freq in gensim_dict.cfs.items():
+            #print(tokid, freq)
+            #out.write('{}\t{}'.format(idtok_dict[tokid],freq))
 
 # UTILITIES ----------------------------------
 
@@ -264,7 +276,6 @@ if __name__ == '__main__':
 
     # transform sparse matrix into gensim corpus
     (gensim_corpus, gensim_dict) = vect2gensim(tf_vectorizer, dtmatrix)
-
     # store produced objets into files under named files
     afix = '_{}docs_{}maxdf_{}mindf_{}ngrm'.format(len(docs),
                                                      max_df,

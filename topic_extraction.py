@@ -272,23 +272,25 @@ if __name__ == '__main__':
     if in_cache('vspace'):
         print('Espacio Vectorial en caché')
     else:
-        vectorizer('data/train', 0.95, 0.01, 10000, 2)
+        vectorizer('data', 0.7, 0.3, 1000, 3)
 
     #######  Generar Modelo LDA  #######
 
     if in_cache('vspace') and in_cache('lda'):
         print('Modelo LDA en caché')
     else:
-        topicsfinder('data/train', 2, 2000, 5)
+        #topicsfinder('data/Sinaloa', 3, 15000, 5)
+        topicsfinder('data', 3, 5000, 5)
 
-    #######  Nubes de Palabras  #######
+    # #######  Nubes de Palabras  #######
 
     if in_cache('vspace') and in_cache('lda') and in_cache('wclouds'):
         print('Nubes en caché')
     else:
-        cloudyfier(2, 500)
+        #cloudyfier(3, 2000)
+        cloudyfier(3, 1600)
 
     #######  Asignación de temas a nuevas notas  #######
-    print('Asignación de temas')
-    topics_assigner('data/test')
+    #print('Asignación de temas')
+    #topics_assigner('data/test')
 
