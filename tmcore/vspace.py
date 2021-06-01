@@ -90,8 +90,8 @@ def vect2gensim(vectorizer, dtmatrix):
 
 def my_preprocessor(text):
     doc_l = text.lower()
-    doc_norep = re.sub(r'\b(\w+)( \1\b)+', r'\1', doc_l)
-    doc_nonum = re.sub(r'\b(\d+)\b', '', doc_norep)
+    doc_norep = re.sub(r'\b(\w+)( \1\b)+', r'\1', doc_l, flags=re.U)
+    doc_nonum = re.sub(r'\b(\d+)\b', '', doc_norep, flags=re.U)
     preprocessed_doc = ' '.join(nltk.word_tokenize(doc_nonum))
 
     return preprocessed_doc
@@ -118,7 +118,21 @@ def build_stoplist(stopwords_file, out_dir, lang='spanish', store=True):
 def load_fromfiles(input_documents, out_dir):
 
     if isfile(input_documents):
-        docs = [l.strip() for l in open(input_documents).readlines()]
+        if input_documents.endswith('txt'):
+            docs = [l.strip() for l in open(input_documents).readlines()]
+        elif input_documents.endswith('json'):
+            with open(input_documents, 'r') as j_read:
+                j = json.loads(j_read.read())
+            # TODO GENERIC 
+            records = j['SOLICITUDES']['SOLICITUD']
+            docs = []
+            titles = []
+            for i, r in enumerate(records):
+                text = r['DescripcionSolicitud']
+                folio = r['Folio']
+                print(i,'\t',folio,'\t',r['FechaSolicitud'],text)
+                docs.append(text)
+                titles.append(folio)
     elif isdir(input_documents):
         print('Exploring dir', input_documents)
         (docs, titles) = docs_as_list(input_documents)
